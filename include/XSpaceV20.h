@@ -1,9 +1,9 @@
 /*
   XSpace V20 Library
 
-  Version   :  1.0.2
+  Version   :  1.0.3
   Autor     :  Pablo Cardenas
-  Fecha     :  09/04/2024
+  Fecha     :  10/04/2024
 
   This is an open source library but dont remeber to reference!
 
@@ -17,9 +17,9 @@
 #include <WiFi.h>
 #include <PubSubClient.h>
 
-#define IN1 32
-#define IN2 33
-#define nSLEEP 25
+#define DRV8837_IN1 32
+#define DRV8837_IN2 33
+#define DRV8837_nSLEEP 25
 
 #define encoder_CHA 34
 #define encoder_CHB 35
@@ -30,19 +30,41 @@
 #define DEGREES 1
 #define RADS 2
 
+
+struct XSEncoder{
+  int resolution;
+  int channelA;
+  int channelB;
+};
+
+struct XSDRV8837{
+  int IN1;
+  int IN2;
+  int PWM_CH_IN1;
+  int PWM_CH_IN2;
+  int nSLEEP;
+  double Vm;
+};
+
 class XSpaceV20Board{
     private:
         double _vel_ant = 0;
-        bool _xspace_info = false;
-        double _resolution;
-        double _vm;
+        bool   _xspace_info = false;
+        int _encoder_idx;
+
+        XSDRV8837 DRV8837;
 
     public:
         /*init method
         frequency  => PWM frequency for drv8837 driver (Hz)
         resolution => encoder pulses/rev * gearmotor reduction 
-        vm => DRV8837 Driver Power Supply voltage (Min=0v Max=11v)*/
-        void init(int frequency, double resolution, double vm);
+        VM => DRV8837 Driver Power Supply voltage (Min=0v Max=11v)*/
+        void init(int frequency, double resolution, double VM);
+
+        void encoder1_init(int enc_CHAx, int enc_CHBx, int resolutionx, int mode);
+        void encoder2_init(int enc_CHAx, int enc_CHBx, int resolutionx, int mode);
+
+        void DRV8837_init(int IN1x, int CH_IN1x, int IN2x, int CH_IN2x, int nSLEEPx,int frequencyx, int Vmx);
         void DRV8837_Sleep();
         void DRV8837_Wake();
         void DRV8837_Voltage(double vp);
@@ -60,5 +82,7 @@ class XSpaceV20Board{
         
         bool Mqtt_IsConnected();
 };
+
+
 
 #endif
