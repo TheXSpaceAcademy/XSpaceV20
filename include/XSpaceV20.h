@@ -1,7 +1,7 @@
 /*
   XSpace V20 Library
 
-  Version   :  1.0.1
+  Version   :  1.0.2
   Autor     :  Pablo Cardenas
   Fecha     :  09/04/2024
 

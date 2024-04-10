@@ -1,12 +1,12 @@
 {
     "name": "XSpaceV20",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "description": "Library used for XSpace V2.0 Boards",
     "keywords": "control, drv8837, esp32, iot, xspace",
     "repository":
     {
       "type": "git",
-      "url": "https://github.com/TheXSpacer/XSpaceV20.git"
+      "url": "https://github.com/TheXSpaceAcademy/XSpaceV20"
     },
     "authors":
     [
