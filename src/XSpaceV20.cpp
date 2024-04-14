@@ -18,19 +18,23 @@ PubSubClient XSpaceV2MQTT(XSpaceV2WifiClient);
 void Mqtt_Callback(char* topic, byte* payload, unsigned int length);
 
 void IRAM_ATTR ISR_encoder1(){
+	detachInterrupt(encoder[E1].channelA);
 	TimerValue[E1] = micros();
-	Xval[E1] = (-1+digitalRead(encoder[E1].channelB)*2); // Asumiendo que encoder_CHB es global o estática
+	Xval[E1] = (-1+digitalRead(encoder[E1].channelB)*2);
 	Periodo[E1] = (TimerValue[E1] - Tant[E1])*Xval[E1];
 	Tant[E1] = TimerValue[E1];
 	counter[E1] = counter[E1]+Xval[E1];
+	attachInterrupt(encoder[E1].channelA, ISR_encoder1, RISING);
 }
 
 void IRAM_ATTR ISR_encoder2(){
+	detachInterrupt(encoder[E2].channelA);
 	TimerValue[E2] = micros();
-	Xval[E2] = (-1+digitalRead(encoder[E2].channelB)*2); // Asumiendo que encoder_CHB es global o estática
+	Xval[E2] = (-1+digitalRead(encoder[E2].channelB)*2);
 	Periodo[E2] = (TimerValue[E2] - Tant[E2])*Xval[E2];
 	Tant[E2] = TimerValue[E2];
 	counter[E2] = counter[E2]+Xval[E2];
+	attachInterrupt(encoder[E2].channelA, ISR_encoder2, RISING);
 }
 
 
