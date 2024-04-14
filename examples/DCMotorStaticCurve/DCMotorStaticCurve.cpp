@@ -24,7 +24,7 @@ XSFilter Filter; // Create an instance of XSFilter for processing the motor's sp
 
 // Constants for motor control
 #define PWM_FREQUENCY 20000 // PWM frequency in Hz
-#define ENCODER_RESOLUTION 960 // Encoder resolution
+#define ENCODER_RESOLUTION 1280 // Encoder resolution
 #define DRV8837_POWER_SUPPLY 5 // Power supply voltage for DRV8837 motor driver
 
 double speed; // Variable to hold the raw speed reading from the motor encoder.
@@ -34,7 +34,7 @@ double filtered_speed; // Variable to hold the filtered speed, providing a stabl
 void SpeedFilter(void *pv) {
   while(1) {
     // Fetch the current speed of the motor in degrees per second.
-    speed = XSBoard.GetEncoderSpeed(DEGREES_PER_SECOND);
+    speed = XSBoard.GetEncoderSpeed(E1,DEGREES_PER_SECOND);
     // Apply a second-order low-pass filter to smooth out the speed readings.
     filtered_speed = Filter.SecondOrderLPF(speed, 20, 0.001);
     vTaskDelay(1); // Pause for a short period before the next reading.
