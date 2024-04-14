@@ -1,12 +1,7 @@
 /*
   XSpace V20 Library
-
-  Version   :  1.0.4
   Autor     :  Pablo Cardenas
-  Fecha     :  12/04/2024
-
   This is an open source library but dont remeber to reference!
-
 */
 
 #include <XSpaceV20.h>
