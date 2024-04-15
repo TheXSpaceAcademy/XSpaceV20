@@ -1,14 +1,13 @@
 /*
 	XSpace V20 Library
-	Autor     :  Pablo Cardenas
-	This is an open source library but dont remeber to reference!
+	Author: Pablo Cardenas
+	Description: An open-source library designed for advanced robotics projects. Please remember to reference this library in your projects!
 */
 
 #ifndef XSPACEV20_H
 #define XSPACEV20_H
 
 #include <Arduino.h>
-#include <stdint.h>
 #include <WiFi.h>
 #include <PubSubClient.h>
 
@@ -27,7 +26,6 @@
 #define DEGREES 1
 #define RADS 2
 
-
 struct XSEncoder{
 	int resolution;
 	int channelA;
@@ -44,41 +42,115 @@ struct XSDRV8837{
 };
 
 class XSpaceV20Board{
-		private:
-				double _vel_ant = 0;
-				bool   _xspace_info = false;
+	private:
+		double _vel_ant = 0;
+		bool   _xspace_info = false;
 
-				XSDRV8837 DRV8837;
+		XSDRV8837 DRV8837;
 
-		public:
-				/*init method
-				frequency  => PWM frequency for drv8837 driver (Hz)
-				resolution => encoder pulses/rev * gearmotor reduction 
-				VM => DRV8837 Driver Power Supply voltage (Min=0v Max=11v)*/
-				void init(int frequency, double resolution, double VM);
+	public:
+		/* Initializes the board and motor driver
+			@param frequency PWM frequency for the DRV8837 driver (in Hz)
+			@param resolution Encoder pulses per revolution * gearmotor reduction
+			@param VM DRV8837 driver power supply voltage (range 0v to 11v)
+		*/
+		void init(int frequency, double resolution, double VM);
 
-				void encoder1_init(int enc_CHAx, int enc_CHBx, int resolutionx, int mode);
-				void encoder2_init(int enc_CHAx, int enc_CHBx, int resolutionx, int mode);
+		/* Initializes encoder1 settings
+			@param enc_CHAx Channel A pin number
+			@param enc_CHBx Channel B pin number
+			@param resolutionx Encoder resolution
+			@param mode Encoding mode (RISING, FALLING)
+		*/
+		void encoder1_init(int enc_CHAx, int enc_CHBx, int resolutionx, int mode);
 
-				void DRV8837_init(int IN1x, int CH_IN1x, int IN2x, int CH_IN2x, int nSLEEPx,int frequencyx, int Vmx);
-				void DRV8837_Sleep();
-				void DRV8837_Wake();
-				void DRV8837_Voltage(double vp);
-				
-				double GetEncoderSpeed(int encoder, int modo);
-				double GetEncoderPosition(int encoder, int modo);
+		/* Initializes encoder2 settings
+			@param enc_CHAx Channel A pin number
+			@param enc_CHBx Channel B pin number
+			@param resolutionx Encoder resolution
+			@param mode Encoding mode (RISING, FALLING)
+		*/
+		void encoder2_init(int enc_CHAx, int enc_CHBx, int resolutionx, int mode);
 
-				void SerialInfo(bool mode);
-				void Wifi_init(const char* ssid, const char* password);
-				void Mqtt_init(const char* mqtt_server, uint16_t mqtt_port);
-				void Mqtt_Connect(const char *clientId, const char *mqtt_user, const char *mqtt_pass);
-				void Mqtt_Publish(const char* topic, const char* payload);
-				void Mqtt_Suscribe(const char* topic);
-				void Mqtt_KeepAlive();
-				
-				bool Mqtt_IsConnected();
+		/* Initializes DRV8837 motor driver
+			@param IN1x Pin connected to IN1 on DRV8837
+			@param CH_IN1x PWM channel for IN1
+			@param IN2x Pin connected to IN2 on DRV8837
+			@param CH_IN2x PWM channel for IN2
+			@param nSLEEPx Pin connected to nSLEEP on DRV8837
+			@param frequencyx PWM frequency
+			@param Vmx Operating voltage for the DRV8837
+		*/
+		void DRV8837_init(int IN1x, int CH_IN1x, int IN2x, int CH_IN2x, int nSLEEPx,int frequencyx, int Vmx);
+		
+		/* Puts the DRV8837 motor driver into sleep mode, reducing power consumption.
+		*/
+		void DRV8837_Sleep();
+
+		/* Wakes the DRV8837 motor driver from sleep mode, enabling normal operation.
+		*/
+		void DRV8837_Wake();
+
+		/* Sets the operating voltage for the DRV8837 motor driver.
+		   @param vp The voltage to be set, which controls the motor speed and power (range 0v to 11v).
+		*/
+		void DRV8837_Voltage(double vp);
+		
+		/* Retrieves the speed of the specified encoder
+			@param encoder Encoder number (E1 or E2)
+			@param mode Unit of measurement (DEGREES_PER_SECOND, RADS_PER_SECOND)
+			@return Current speed of the encoder
+		*/
+		double GetEncoderSpeed(int encoder, int modo);
+
+		/* Retrieves the position of the specified encoder
+			@param encoder Encoder number (E1 or E2)
+			@param mode Unit of measurement (DEGREES, RADS)
+			@return Current position of the encoder
+		*/
+		double GetEncoderPosition(int encoder, int modo);
+
+		/* Toggles serial debugging information
+			@param mode Enable or disable debugging information
+		*/
+		void SerialInfo(bool mode);
+
+		/* Initializes WiFi connection
+			@param ssid WiFi SSID
+			@param password WiFi password
+		*/
+		void Wifi_init(const char* ssid, const char* password);
+
+		/* Initializes MQTT client
+			@param mqtt_server MQTT server address
+			@param mqtt_port MQTT server port
+		*/
+		void Mqtt_init(const char* mqtt_server, uint16_t mqtt_port);
+
+		/* Connects to the MQTT server
+			@param clientId MQTT client ID
+			@param mqtt_user MQTT username
+			@param mqtt_pass MQTT password
+		*/
+		void Mqtt_Connect(const char *clientId, const char *mqtt_user, const char *mqtt_pass);
+
+		/* Publishes a message to a MQTT topic
+			@param topic MQTT topic to publish to
+			@param payload Message to publish
+		*/
+		void Mqtt_Publish(const char* topic, const char* payload);
+
+		/* Subscribes to a MQTT topic
+			@param topic MQTT topic to subscribe to
+		*/
+		void Mqtt_Suscribe(const char* topic);
+
+		void Mqtt_KeepAlive();
+		
+		/* Checks if the MQTT connection is still active
+			@return True if connected, false otherwise
+		*/
+		bool Mqtt_IsConnected();
 };
-
-
 
 #endif
