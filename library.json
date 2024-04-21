@@ -1,7 +1,7 @@
 {
     "name": "XSpaceV20",
-    "version": "1.0.7",
-    "description": "Library used for XSpace V2.0 Boards",
+    "version": "1.0.8",
+    "description": "Library used for XSpace v2.0 Boards and another ESP32 based boards",
     "keywords": "control, drv8837, esp32, iot, xspace",
     "repository":
     {
@@ -24,9 +24,6 @@
       ]
     },
     "license": "MIT",
-    "dependencies": {
-        "knolleary/PubSubClient": "^2.8"
-    },
     "frameworks": ["Arduino"],
     "platforms": ["espressif32"]
   }

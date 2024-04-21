@@ -13,10 +13,6 @@ volatile double counter[2] = {0, 0};
 volatile double Xval[2];
 XSEncoder encoder[2];
 
-WiFiClient XSpaceV2WifiClient;
-PubSubClient XSpaceV2MQTT(XSpaceV2WifiClient);
-void Mqtt_Callback(char* topic, byte* payload, unsigned int length);
-
 void IRAM_ATTR ISR_encoder1(){
 	detachInterrupt(encoder[E1].channelA);
 	TimerValue[E1] = micros();
@@ -146,87 +142,4 @@ double XSpaceV20Board::GetEncoderPosition(int encx, int modo){
 	}
 
 	return pos;
-}
-
-/* Metodos reescritos para un mejor entendimiento */
-
-void XSpaceV20Board::Wifi_init(const char* ssid, const char* password){
-	
-	if(this->_xspace_info){
-		Serial.println();
-		Serial.print("Conectando a ssid: ");
-		Serial.println(ssid);
-	}
-
-	WiFi.begin(ssid, password);
-
-	while (WiFi.status() != WL_CONNECTED) {
-		delay(500);
-		if(this->_xspace_info) Serial.print(".");
-	}
-
-	if(this->_xspace_info){
-		Serial.println("");
-		Serial.println("Conectado!!");
-		Serial.println("Dirección IP: ");
-		Serial.println(WiFi.localIP());
-	}
-	WiFi.setSleep(false);
-
-}
-
-void XSpaceV20Board::Mqtt_Connect(const char *clientId, const char *mqtt_user, const char *mqtt_pass){
-
-	while (!XSpaceV2MQTT.connected()) {
-		
-		
-		// Intentamos conectar
-		if (XSpaceV2MQTT.connect(clientId,mqtt_user,mqtt_pass)) {
-				if(this->_xspace_info) Serial.println("Conectado al Broker!");
-				
-		}else {
-			if(this->_xspace_info){
-				Serial.print("falló :( con error -> ");
-				Serial.print(XSpaceV2MQTT.state());
-				Serial.println(" Intentamos de nuevo en 5 segundos");
-				delay(5000);
-			}
-		}
-	}
-
-}
-
-void XSpaceV20Board::Mqtt_init(const char *mqtt_server, uint16_t mqtt_port){
-	XSpaceV2MQTT.setServer(mqtt_server, mqtt_port);
-	XSpaceV2MQTT.setCallback([this] (char* topic, byte* payload, unsigned int length) { Mqtt_Callback(topic, payload, length); });
-}
-
-bool XSpaceV20Board::Mqtt_IsConnected(){
-	return XSpaceV2MQTT.connected();
-}
-
-void XSpaceV20Board::Mqtt_Publish(const char* topic, const char* payload){
-	XSpaceV2MQTT.publish(topic,payload);
-}
-
-void XSpaceV20Board::Mqtt_Suscribe(const char* topic){
-	if(this->Mqtt_IsConnected()){
-		 XSpaceV2MQTT.subscribe(topic);
-		 if(this->_xspace_info){
-			 Serial.print("Suscrito a: ");
-			 Serial.println(topic);
-		 }else{
-			 Serial.println("Subscripcion fallida, no se tiene conexion con el broker");
-		 }
-	}
-   
-
-}
-
-void XSpaceV20Board::Mqtt_KeepAlive(){
-	XSpaceV2MQTT.loop();
-}
-
-void XSpaceV20Board::SerialInfo(bool mode){
-	this->_xspace_info = mode;
 }

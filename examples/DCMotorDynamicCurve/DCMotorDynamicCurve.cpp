@@ -19,7 +19,7 @@ This sets the baud rate to 1,000,000 bits per second, matching the configuration
 #include <XSpaceV20.h>
 #include <XSControl.h>
 
-// Initialization of the board and filter
+// Definition of methods for the board and filter
 XSpaceV20Board XSBoard;
 XSFilter Filter;
 

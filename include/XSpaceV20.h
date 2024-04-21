@@ -8,8 +8,6 @@
 #define XSPACEV20_H
 
 #include <Arduino.h>
-#include <WiFi.h>
-#include <PubSubClient.h>
 
 #define DRV8837_IN1 32
 #define DRV8837_IN2 33
@@ -35,9 +33,10 @@ struct XSEncoder{
 struct XSDRV8837{
 	int IN1;
 	int IN2;
+	int nSLEEP;
+
 	int PWM_CH_IN1;
 	int PWM_CH_IN2;
-	int nSLEEP;
 	double Vm;
 };
 
@@ -110,47 +109,6 @@ class XSpaceV20Board{
 		*/
 		double GetEncoderPosition(int encoder, int modo);
 
-		/* Toggles serial debugging information
-			@param mode Enable or disable debugging information
-		*/
-		void SerialInfo(bool mode);
-
-		/* Initializes WiFi connection
-			@param ssid WiFi SSID
-			@param password WiFi password
-		*/
-		void Wifi_init(const char* ssid, const char* password);
-
-		/* Initializes MQTT client
-			@param mqtt_server MQTT server address
-			@param mqtt_port MQTT server port
-		*/
-		void Mqtt_init(const char* mqtt_server, uint16_t mqtt_port);
-
-		/* Connects to the MQTT server
-			@param clientId MQTT client ID
-			@param mqtt_user MQTT username
-			@param mqtt_pass MQTT password
-		*/
-		void Mqtt_Connect(const char *clientId, const char *mqtt_user, const char *mqtt_pass);
-
-		/* Publishes a message to a MQTT topic
-			@param topic MQTT topic to publish to
-			@param payload Message to publish
-		*/
-		void Mqtt_Publish(const char* topic, const char* payload);
-
-		/* Subscribes to a MQTT topic
-			@param topic MQTT topic to subscribe to
-		*/
-		void Mqtt_Suscribe(const char* topic);
-
-		void Mqtt_KeepAlive();
-		
-		/* Checks if the MQTT connection is still active
-			@return True if connected, false otherwise
-		*/
-		bool Mqtt_IsConnected();
 };
 
 #endif
