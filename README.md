@@ -17,7 +17,7 @@ To use `XSpaceV20` with PlatformIO, add the following line to your `platformio.i
 
 ```ini
 lib_deps =
-  git://github.com/TheXSpaceAcademy/XSpaceV20.git#main
+  https://github.com/TheXSpaceAcademy/XSpaceV20.git#main
 ```
 
 ### Arduino IDE

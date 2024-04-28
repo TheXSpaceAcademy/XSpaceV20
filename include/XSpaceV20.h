@@ -1,5 +1,5 @@
 /*
-	XSpace V20 Library
+	XSpaceV20 Library
 	Author: Pablo Cardenas
 	Description: An open-source library designed for advanced robotics projects. Please remember to reference this library in your projects!
 */
@@ -43,8 +43,6 @@ struct XSDRV8837{
 class XSpaceV20Board{
 	private:
 		double _vel_ant = 0;
-		bool   _xspace_info = false;
-
 		XSDRV8837 DRV8837;
 
 	public:

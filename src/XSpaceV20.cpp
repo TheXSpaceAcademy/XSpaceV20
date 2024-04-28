@@ -7,7 +7,7 @@
 #include <XSpaceV20.h>
 
 volatile double TimerValue[2] = {0, 0};
-volatile double Periodo[2] = {1000000, 1000000};
+volatile double Periodo[2] = {1000000000.0, 1000000000.0};
 volatile double Tant[2] = {0, 0};
 volatile double counter[2] = {0, 0};
 volatile double Xval[2];
