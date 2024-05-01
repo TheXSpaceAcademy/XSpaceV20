@@ -61,44 +61,68 @@ void XSpaceV20Board::encoder2_init(int enc_CHAx, int enc_CHBx, int resolutionx, 
 }
 
 void XSpaceV20Board::DRV8837_init(int IN1x, int CH_IN1x, int IN2x, int CH_IN2x, int nSLEEPx,int frequencyx, int Vmx){
-	DRV8837.IN1 = IN1x;
-	DRV8837.IN2 = IN2x;
-	DRV8837.nSLEEP = nSLEEPx;
-	DRV8837.PWM_CH_IN1 = CH_IN1x;
-	DRV8837.PWM_CH_IN2 = CH_IN2x;
-	DRV8837.Vm = Vmx;
+	this->DRV8837_init(DRVx1, IN1x, CH_IN1x, IN2x, CH_IN2x, nSLEEPx, frequencyx, Vmx);
+}
 
-	pinMode(DRV8837.nSLEEP,OUTPUT);
-	this->DRV8837_Sleep();
+void XSpaceV20Board::DRV8837_init(int DRVx, int IN1x, int CH_IN1x, int IN2x, int CH_IN2x, int nSLEEPx,int frequencyx, int Vmx){
+	DRV8837[DRVx].IN1 = IN1x;
+	DRV8837[DRVx].IN2 = IN2x;
+	DRV8837[DRVx].nSLEEP = nSLEEPx;
+	DRV8837[DRVx].PWM_CH_IN1 = CH_IN1x;
+	DRV8837[DRVx].PWM_CH_IN2 = CH_IN2x;
+	DRV8837[DRVx].Vm = Vmx;
 
-	ledcSetup(DRV8837.PWM_CH_IN1, frequencyx, 10);
-	ledcSetup(DRV8837.PWM_CH_IN2, frequencyx, 10);
+	pinMode(13,OUTPUT);
 
-	ledcAttachPin(DRV8837.IN1, DRV8837.PWM_CH_IN1);
-	ledcAttachPin(DRV8837.IN2, DRV8837.PWM_CH_IN2);
+	pinMode(DRV8837[DRVx].nSLEEP,OUTPUT);
+	this->DRV8837_Sleep(DRVx);
+
+	ledcSetup(DRV8837[DRVx].PWM_CH_IN1, frequencyx, 10);
+	ledcSetup(DRV8837[DRVx].PWM_CH_IN2, frequencyx, 10);
+
+	ledcAttachPin(DRV8837[DRVx].IN1, DRV8837[DRVx].PWM_CH_IN1);
+	ledcAttachPin(DRV8837[DRVx].IN2, DRV8837[DRVx].PWM_CH_IN2);
 
 }
 
 void XSpaceV20Board::DRV8837_Sleep(){
-	digitalWrite(DRV8837.nSLEEP,LOW);
+	digitalWrite(DRV8837[DRVx1].nSLEEP,LOW);
 }
-
 void XSpaceV20Board::DRV8837_Wake(){
-	digitalWrite(DRV8837.nSLEEP,HIGH);
+	digitalWrite(DRV8837[DRVx1].nSLEEP,HIGH);
 }
+void XSpaceV20Board::DRV8837_Sleep(int DRVx){
+	digitalWrite(DRV8837[DRVx].nSLEEP,LOW);
+}
+void XSpaceV20Board::DRV8837_Wake(int DRVx){
+	digitalWrite(DRV8837[DRVx].nSLEEP,HIGH);
+}
+void XSpaceV20Board::DRV8837_Voltage(int DRVx, double Vp){
 
-void XSpaceV20Board::DRV8837_Voltage(double Vp){
-
-	if(Vp>DRV8837.Vm) Vp = DRV8837.Vm;
-	if(Vp<-DRV8837.Vm) Vp = -DRV8837.Vm;
-	uint32_t Duty = (uint32_t) ( (1 - abs(Vp)/DRV8837.Vm) * 1023.0);
+	if(Vp>DRV8837[DRVx].Vm) Vp = DRV8837[DRVx].Vm;
+	if(Vp<-DRV8837[DRVx].Vm) Vp = -DRV8837[DRVx].Vm;
+	uint32_t Duty = (uint32_t) ( (1 - abs(Vp)/DRV8837[DRVx].Vm) * 1023.0);
 
 	if(Vp<0){
-		ledcWrite(DRV8837.PWM_CH_IN1, Duty);
-		ledcWrite(DRV8837.PWM_CH_IN2, 1023);
+		ledcWrite(DRV8837[DRVx].PWM_CH_IN1, Duty);
+		ledcWrite(DRV8837[DRVx].PWM_CH_IN2, 1023);
 	}else{
-		ledcWrite(DRV8837.PWM_CH_IN1, 1023);
-		ledcWrite(DRV8837.PWM_CH_IN2, Duty);
+		ledcWrite(DRV8837[DRVx].PWM_CH_IN1, 1023);
+		ledcWrite(DRV8837[DRVx].PWM_CH_IN2, Duty);
+	}
+}
+void XSpaceV20Board::DRV8837_Voltage(double Vp){
+
+	if(Vp>DRV8837[DRVx1].Vm) Vp = DRV8837[DRVx1].Vm;
+	if(Vp<-DRV8837[DRVx1].Vm) Vp = -DRV8837[DRVx1].Vm;
+	uint32_t Duty = (uint32_t) ( (1 - abs(Vp)/DRV8837[DRVx1].Vm) * 1023.0);
+
+	if(Vp<0){
+		ledcWrite(DRV8837[DRVx1].PWM_CH_IN1, Duty);
+		ledcWrite(DRV8837[DRVx1].PWM_CH_IN2, 1023);
+	}else{
+		ledcWrite(DRV8837[DRVx1].PWM_CH_IN1, 1023);
+		ledcWrite(DRV8837[DRVx1].PWM_CH_IN2, Duty);
 	}
 }
 

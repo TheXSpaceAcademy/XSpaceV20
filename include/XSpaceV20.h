@@ -12,6 +12,7 @@
 #define DRV8837_IN1 32
 #define DRV8837_IN2 33
 #define DRV8837_nSLEEP 25
+#define DRVx1 0
 
 #define encoder_CHA 34
 #define encoder_CHB 35
@@ -43,7 +44,7 @@ struct XSDRV8837{
 class XSpaceV20Board{
 	private:
 		double _vel_ant = 0;
-		XSDRV8837 DRV8837;
+		XSDRV8837 DRV8837[1];
 
 	public:
 		/* Initializes the board and motor driver
@@ -79,19 +80,47 @@ class XSpaceV20Board{
 			@param Vmx Operating voltage for the DRV8837
 		*/
 		void DRV8837_init(int IN1x, int CH_IN1x, int IN2x, int CH_IN2x, int nSLEEPx,int frequencyx, int Vmx);
+
+		/* Initializes DRV8837 motor driver
+			@param DRVx index of DRV8837 (DRVx1, DRVx2)
+			@param IN1x Pin connected to IN1 on DRV8837
+			@param CH_IN1x PWM channel for IN1
+			@param IN2x Pin connected to IN2 on DRV8837
+			@param CH_IN2x PWM channel for IN2
+			@param nSLEEPx Pin connected to nSLEEP on DRV8837
+			@param frequencyx PWM frequency
+			@param Vmx Operating voltage for the DRV8837
+		*/
+		void DRV8837_init(int DRVx, int IN1x, int CH_IN1x, int IN2x, int CH_IN2x, int nSLEEPx,int frequencyx, int Vmx);
 		
 		/* Puts the DRV8837 motor driver into sleep mode, reducing power consumption.
 		*/
 		void DRV8837_Sleep();
 
+		/* Puts the DRV8837 motor driver into sleep mode, reducing power consumption.
+			@param DRVx index of DRV8837 (DRVx1)
+		*/
+		void DRV8837_Sleep(int DRVx);
+
 		/* Wakes the DRV8837 motor driver from sleep mode, enabling normal operation.
 		*/
 		void DRV8837_Wake();
+
+		/* Wakes the DRV8837 motor driver from sleep mode, enabling normal operation.
+			@param DRVx index of DRV8837 (DRVx1)
+		*/
+		void DRV8837_Wake(int DRVx);
 
 		/* Sets the operating voltage for the DRV8837 motor driver.
 		   @param vp The voltage to be set, which controls the motor speed and power (range 0v to 11v).
 		*/
 		void DRV8837_Voltage(double vp);
+	
+		/* Sets the operating voltage for the DRV8837 motor driver.
+		@param DRVx index of DRV8837 (DRVx1)
+		@param vp The voltage to be set, which controls the motor speed and power (range 0v to 11v).
+		*/
+		void DRV8837_Voltage(int DRVx,double vp);
 		
 		/* Retrieves the speed of the specified encoder
 			@param encoder Encoder number (E1 or E2)
