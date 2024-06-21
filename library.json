@@ -1,6 +1,6 @@
 {
     "name": "XSpaceV20",
-    "version": "1.1.0",
+    "version": "1.1.1",
     "description": "Library used for XSpace v2.0 Boards and another ESP32 based boards",
     "keywords": "arduino, control, drv8837, esp32, iot, xspace",
     "repository":

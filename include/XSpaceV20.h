@@ -45,7 +45,6 @@ class XSpaceV20Board{
 	private:
 		double _vel_ant = 0;
 		XSDRV8837 DRV8837[1];
-
 	public:
 		/* Initializes the board and motor driver
 			@param frequency PWM frequency for the DRV8837 driver (in Hz)
